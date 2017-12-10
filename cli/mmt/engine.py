@@ -199,13 +199,13 @@ class Engine(object):
     def exists(self):
         return os.path.isfile(self.config_path)
 
-    def get_logfile(self, name, ensure=True):
+    def get_logfile(self, name, ensure=True, append=False):
         if ensure and not os.path.isdir(self.logs_path):
             fileutils.makedirs(self.logs_path, exist_ok=True)
 
         logfile = os.path.join(self.logs_path, name + '.log')
 
-        if ensure and os.path.isfile(logfile):
+        if not append and ensure and os.path.isfile(logfile):
             os.remove(logfile)
 
         return logfile
@@ -436,7 +436,8 @@ class EngineBuilder:
             os.makedirs(self._engine.path)
 
         # Create a new logger for the building activities,
-        log_stream = open(self._engine.get_logfile('training'), 'wb')
+        log_file = self._engine.get_logfile('training', append=resume)
+        log_stream = open(log_file, 'ab' if resume else 'wb')
         logging.basicConfig(format='%(asctime)-15s [%(levelname)s] - %(message)s',
                             level=logging.DEBUG, stream=log_stream)
         logger = logging.getLogger('EngineBuilder')
@@ -557,8 +558,13 @@ class EngineBuilder:
                                                                                    self._engine.target_lang,
                                                                                    roots=preprocessed_folder)
         else:
+            corpora = args.bilingual_corpora + args.monolingual_corpora
+            if not corpora:
+                raise CorpusNotFoundInFolderException("Could not find any valid %s -> %s segments in your input." %
+                                                      (self._engine.source_lang, self._engine.target_lang))
+
             processed_bicorpora, processed_monocorpora = self._engine.training_preprocessor.process(
-                args.bilingual_corpora + args.monolingual_corpora,
+                corpora,
                 preprocessed_folder,
                 data_path=(self._engine.data_path if self._split_trainingset else None),
                 vb_path=self._engine.vocabulary_path,

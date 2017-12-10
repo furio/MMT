@@ -41,11 +41,11 @@ In order to create a *phrase-based* engine you can simply:
 $ ./mmt create en it examples/data/train
 ```
 
-*Note:* if you wish to create an *neural* engine, you can just add the `--neural` flag:
+*Note:* if you wish to create an *neural* engine, please add more data to the training set and specify the `--neural` flag:
 ```bash
 $ ./mmt create en it examples/data/train --neural
 ```
-Please notice however that the training process will take much more time and you will need a dedicated hardware (GPUs) in order to create and use the neural engine.
+Neural Engine on this tiny example data does not give any resonable output. We reccommend to complete the tutorial and then add more data to try neural.
 
 ### Start the engine
 
@@ -58,10 +58,10 @@ You can stop it with the command `stop`.
 
 Let's now use the command-line tool `mmt` to query the engine with the sentence *hello world* and context *computer*:
 ```
-$ ./mmt translate --context computer "hello world"
+$ ./mmt translate --context "programming language tutorial" "hello world"
 
 ModernMT Translate command line
->> Context: ibm 87%, europarl 13%
+>> Context: ibm 64%, microsoft 27%, europarl 9%
 
 >> hello mondo
 ```
@@ -78,10 +78,10 @@ Let's now add a contribution to the existing engine, **without** need for retrai
 ```
 And now repeat the previous translation query: the engine has just learned a new word and the result is immediately visible.
 ```
-$ ./mmt translate --context computer "hello world"
+$ ./mmt translate --context "programming language tutorial" "hello world"
 
 ModernMT Translate command line
->> Context: ibm 87%, europarl 13%
+>> Context: ibm 64%, microsoft 27%, europarl 9%
 
 >> ciao mondo
 ```
@@ -152,10 +152,21 @@ You can learn more on the Wiki page [MMT Cluster](https://github.com/ModernMT/MM
 If you need to customize the properties and behaviour of your engines, you can specify advanced settings in their configuration files. 
 You can learn how on the Wiki page [Advanced Configurations](https://github.com/ModernMT/MMT/wiki/Advanced-Configurations)
 
-# Donate
+# Enterprise Edition
 
-MMT is free, is open source and welcomes contributions and donations.
+MMT Community is free, is open source and welcomes contributions and donations.
+MMT Community is sponsored by its funding members (Translated, FBK, UEDIN and TAUS) and the European Commission. 
 
-MMT is currently sponsored by its funding members (Translated, FBK, UEDIN and TAUS) and the European Commission. 
+We also have an **MMT Enterprise Edition**, managed by the MMT company and not available on GitHub, with some extra features:
+- Pre-trained generic and custom models in 14 language pairs (and more to come!) on multiple billion words of premium data.
+- Support for cluster of servers for higher throughput, load balancing and high availability. 
+- Support for 69 files formats without format loss (Office, Adobe, Localization, etc).
+- Enterprise Customer Support via Video Conference Call, Phone and Email on business hours and optionally 24x7.
+- Custom developments billed per hour of work.
 
-For donations, customizations and words of encouragement contact alessandro@translated.net
+MMT Enterprise is avaialble in 3 operating modes:
+- On **Customer Premises**. Maxmimum security, higher cost for throughput and high availability.
+- On **dedicated servers** on Amazon Web Services. Excellent security, mid cost for throughput and high availability.
+- **Shared servers** on Amazon Web Services. Good Security, Low cost for excellent throughput and high availability.
+
+For any information please email Marcello Federico, mrcfdr@gmail.com
